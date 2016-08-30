@@ -1,0 +1,30 @@
+{
+  "name": "smart-contract-lab",
+  "description": "Laboratory for testing smart contracts",
+  "author": "hrobeers",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "start": "brunch watch --server",
+    "build": "brunch build --production",
+    "test": "mocha --compilers ls:livescript"
+  },
+  "dependencies": {
+    "bitcore-lib": "^0.13.19",
+    "chai": "^3.5.0",
+    "chai-string": "^1.2.0",
+    "mocha": "^3.0.2"
+  },
+  "devDependencies": {
+    "brunch": "^2.0.0",
+    "javascript-brunch": "^2.0.0",
+    "css-brunch": "^2.0.0",
+    "uglify-js-brunch": "^2.0.0",
+    "clean-css-brunch": "^2.0.0",
+    "auto-reload-brunch": "^2.0.0",
+    "livescript-brunch": "^2.0.0"
+  }
+}

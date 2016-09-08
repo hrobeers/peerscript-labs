@@ -1,4 +1,5 @@
-require './bitcore-ppc'
+{ app-require } = require './test-utils'
 
-require './p2pkh'
+app-require 'bitcore-ppc'
+app-require 'transactions/all'
 require './TODO'

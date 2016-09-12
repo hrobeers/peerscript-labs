@@ -12,10 +12,9 @@ unspent-output = new Transaction.UnspentOutput({
 console.log unspent-output
 
 describe 'P2PKH', ->
-  describe 'bitcore.Transaction', ->
-    specify 'should run fancy smart contracts', (done) ->
-      transaction = new Transaction()
-      # .from(unspent-output)
-      .fee(100)
-      transaction.serialize(true) |> console.log
-      done()
+  specify 'Coming soon', (done) ->
+    transaction = new Transaction()
+    # .from(unspent-output)
+    .fee(100)
+    transaction.serialize(true) |> console.log
+    done()

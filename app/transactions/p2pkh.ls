@@ -9,7 +9,6 @@ unspent-output = new Transaction.UnspentOutput({
   "scriptPubKey" : "76a914dba5a16361d062adb7cc81e752c4dc2062d076fb88ac",
   "satoshis" : 70000
 })
-console.log unspent-output
 
 describe 'P2PKH', ->
   specify 'Coming soon', (done) ->

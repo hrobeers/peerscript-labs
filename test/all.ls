@@ -1,5 +1,7 @@
 { app-require } = require './test-utils'
 
 app-require 'bitcore-ppc'
+
+app-require 'puzzles/all'
 app-require 'transactions/all'
-require './TODO'
+app-require 'contracts/all'

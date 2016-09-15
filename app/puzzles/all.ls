@@ -1,3 +1,7 @@
+{ Script } = require 'bitcore-lib'
+runner = require '../script-runner' .createRunner('Puzzles')
+
 describe 'Puzzles', ->
-  describe 'x + 5 = 6', ->
-    specify 'Coming soon', (done) -> done()
+  runner 'x + 5 = 6',
+          Script('OP_5 OP_ADD OP_6 OP_EQUAL'),
+          Script('OP_1')

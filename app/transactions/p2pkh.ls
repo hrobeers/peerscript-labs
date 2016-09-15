@@ -15,5 +15,5 @@ describe 'P2PKH', ->
     transaction = new Transaction()
     # .from(unspent-output)
     .fee(100)
-    transaction.serialize(true) |> console.log
+    transaction.serialize(true)
     done()

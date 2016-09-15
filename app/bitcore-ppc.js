@@ -64,8 +64,14 @@ Transaction.prototype.toBufferWriter = function(writer) {
   return writer;
 };
 
+var checkArgument = function(condition, argumentName, message, docsPath) {
+  if (!condition) {
+    throw new bitcore.errors.InvalidArgument(argumentName, message, docsPath);
+  }
+};
+
 Transaction.prototype.fromBufferReader = function(reader) {
-  $.checkArgument(!reader.finished(), 'No transaction data received');
+  checkArgument(!reader.finished(), 'No transaction data received');
   var i, sizeTxIns, sizeTxOuts;
 
   this.version = reader.readUInt32LE();

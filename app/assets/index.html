@@ -408,7 +408,7 @@
                             </p>
                             <ul class="list-inline item-details">
                                 <li>
-                                  <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-play"></i> Run Puzzles</button>
+                                  <button type="button" class="btn btn-primary" onclick="run('Puzzles')"><i class="fa fa-play"></i> Run Puzzles</button>
                                 </li>
                                 <li>
                                   <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
@@ -440,7 +440,7 @@
 
                             <ul class="list-inline item-details">
                                 <li>
-                                  <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-play"></i> Run Transactions</button>
+                                  <button type="button" class="btn btn-primary" onclick="run('transactions')"><i class="fa fa-play"></i> Run Transactions</button>
                                 </li>
                                 <li>
                                   <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
@@ -476,7 +476,7 @@
 
                             <ul class="list-inline item-details">
                                 <li>
-                                  <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-play"></i> Run Contracts</button>
+                                  <button type="button" class="btn btn-primary" onclick="run('Smart Contracts')"><i class="fa fa-play"></i> Run Contracts</button>
                                 </li>
                                 <li>
                                   <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
@@ -513,6 +513,11 @@
     <script src="test.js"></script>
     <script>
       require('initialize');
+
+      var run = function(toRun) {
+        window.location.hash = '#run';
+        window.location = 'http://localhost:3334/?grep=' + toRun + '#run';
+      }
     </script>
 
 </body>

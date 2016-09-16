@@ -4,10 +4,13 @@ chai = require 'chai'
 { Transaction, Script } = require 'bitcore-lib'
 { Interpreter } = Script
 
-module.exports = (outputScript, redeemScript, ctx) ->
+module.exports = (ctx, scripts) ->
   done = ctx.test.callback
   groupName = ctx.test.parent.title
   scriptName = ctx.test.title
+
+  outputScript = scripts.lock
+  redeemScript = scripts.redeem
 
   # Print output script information
   '\n' + groupName + ': ' + scriptName + '\n' +

@@ -42,6 +42,8 @@ bitcore.Networks.defaultNetwork = bitcore.Networks.get('peercoin');
 //
 
 var Transaction = bitcore.Transaction;
+var Input = Transaction.Input;
+var Output = Transaction.Output;
 
 var _ = require('lodash');
 

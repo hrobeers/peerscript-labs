@@ -1,3 +1,7 @@
+# Copyright (c) 2016 hrobeers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 chai = require 'chai'
 { assert, expect, should } = chai
 
@@ -15,7 +19,8 @@ module.exports = (ctx, scripts) ->
   # Print output script information
   '\n' + groupName + ': ' + scriptName + '\n' +
   '  Output script: ' + outputScript.toString() + '\n' +
-  '  P2SH output: ' + outputScript.toScriptHashOut().toString()
+  '  P2SH output: ' + outputScript.toScriptHashOut().toString() + '\n' +
+  '  P2SH address: ' + outputScript.toScriptHashOut().toAddress().toString()
   |> console.log
 
   Interpreter().verify(redeemScript, outputScript)

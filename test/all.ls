@@ -1,6 +1,10 @@
 { app-require } = require './test-utils'
 
+bitcore = require 'bitcore-lib'
 app-require 'bitcore-ppc'
+config = app-require 'config'
+if (config.testnet)
+  bitcore.Networks.defaultNetwork = bitcore.Networks.get 'peercoin-testnet'
 
 app-require 'puzzles/all'
 app-require 'transactions/all'

@@ -5,4 +5,4 @@ describe 'Puzzles', ->
   specify 'x + 5 = 6', (done) ->
     run this,
       lock: Script('OP_5 OP_ADD OP_6 OP_EQUAL')
-      redeem: Script('OP_1')
+      unlock: Script('OP_1')

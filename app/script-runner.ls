@@ -23,7 +23,7 @@ module.exports = (ctx, scripts) ->
 
   # Print output script information
   '\n' + groupName + ': ' + scriptName + '\n' +
-  '  Output script: ' + outputScript.toString() + '\n' +
+  '  Lock script: ' + outputScript.toString() + '\n' +
   '  P2SH output: ' + outputScript.toScriptHashOut().toString() + '\n' +
   '  P2SH address: ' + outputScript.toScriptHashOut().toAddress().toString()
   |> console.log
@@ -56,7 +56,7 @@ create-redeem-transaction = (redeem-script, prev-output-script) ->
   prev-output-index = unspent-txn.outputs
   |> find-index (o) -> o.script.toString() == prev-output-script.toScriptHashOut().toString()
 
-  if (prev-output-index < 0) then return undefined
+  if (!prev-output-index) then return undefined
 
   prev-output = unspent-txn.outputs[prev-output-index]
 

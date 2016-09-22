@@ -430,15 +430,8 @@ describe('Transactions', function(){
 });
 
 ;require.register("transactions/p2pkh.ls", function(exports, require, module) {
-var Transaction, unspentOutput;
+var Transaction;
 Transaction = require('bitcore-lib').Transaction;
-unspentOutput = new Transaction.UnspentOutput({
-  "txId": "6f46c18e85d072673b706c627f1c61a9b92f6f437699c7c711a276bef4885842",
-  "outputIndex": 0,
-  "address": "PUcZZBq2qg7z2EM2db8G4X7Z1JoduoBUZx",
-  "scriptPubKey": "76a914dba5a16361d062adb7cc81e752c4dc2062d076fb88ac",
-  "satoshis": 70000
-});
 describe('P2PKH', function(){
   return specify('Coming soon', function(done){
     var transaction;

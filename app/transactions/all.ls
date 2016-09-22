@@ -1,2 +1,2 @@
-describe 'Transactions' ->
+describe 'Transactions', ->
   require './p2pkh'

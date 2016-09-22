@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "bitcore-lib": "^0.13.19",
+    "buffer": "^4.9.1",
     "chai": "^3.5.0",
     "chai-string": "^1.2.0",
     "mocha": "^3.0.2"

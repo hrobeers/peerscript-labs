@@ -316,21 +316,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-require.register("puzzles/all.ls", function(exports, require, module) {
-var Script, run;
-Script = require('bitcore-lib').Script;
-run = require('../script-runner');
-describe('Puzzles', function(){
-  return specify('x + 5 = 6', function(done){
-    return run(this, {
+require.register("puzzles/all.js", function(exports, require, module) {
+var Script = require('bitcore-lib').Script;
+var run = require('../script-runner');
+
+describe('Puzzles', function() {
+  specify('x + 5 = 6', function(done) {
+    run(this, {
       lock: Script('OP_5 OP_ADD OP_6 OP_EQUAL'),
       unlock: Script('OP_1')
     });
   });
-});
+
+  specify('x * 2 = 16', function(done) {
+    run(this, {
+      lock: Script('OP_DUP OP_ADD OP_16 OP_EQUAL'),
+      unlock: Script('OP_NOP')
+    });
+  });
+
+  specify('if statement', function(done) {
+    run(this, {
+      lock: Script('OP_5 OP_ADD')
+            .add(Script('OP_IF'))
+            .add(Script(  'OP_RETURN'))
+            .add(Script('OP_ELSE'))
+            .add(Script(  'OP_TRUE'))
+            .add(Script('OP_ENDIF')),
+      unlock: Script('OP_NOP')
+    });
+  });
+
+  specify('obfuscated stack', function(done) {
+    run(this, {
+      lock: Script('OP_DEPTH OP_3 OP_EQUALVERIFY')
+            .add(Script('OP_ROT OP_DUP OP_3 OP_EQUALVERIFY'))
+            .add(Script('OP_ADD OP_8 OP_EQUALVERIFY'))
+            .add(Script('OP_TRUE OP_EQUAL')),
+      unlock: Script('OP_NOP')
+    });
+  });
 });
 
-;require.register("script-runner.ls", function(exports, require, module) {
+});
+
+require.register("script-runner.ls", function(exports, require, module) {
 var chai, assert, expect, should, ref$, Transaction, Script, Input, Output, Interpreter, findIndex, config, createRedeemTransaction;
 chai = require('chai');
 assert = chai.assert, expect = chai.expect, should = chai.should;
@@ -347,7 +377,7 @@ module.exports = function(ctx, scripts){
   outputScript = scripts.lock;
   unlockScript = scripts.unlock;
   console.log(
-  '\n' + groupName + ': ' + scriptName + '\n' + '  Output script: ' + outputScript.toString() + '\n' + '  P2SH output: ' + outputScript.toScriptHashOut().toString() + '\n' + '  P2SH address: ' + outputScript.toScriptHashOut().toAddress().toString());
+  '\n' + groupName + ': ' + scriptName + '\n' + '  Lock script: ' + outputScript.toString() + '\n' + '  P2SH output: ' + outputScript.toScriptHashOut().toString() + '\n' + '  P2SH address: ' + outputScript.toScriptHashOut().toAddress().toString());
   assert(Interpreter().verify(unlockScript, outputScript), 'Incorrect solution Script');
   console.log(
   '  Unlock script: ' + unlockScript.toString() + '\n');
@@ -378,7 +408,7 @@ createRedeemTransaction = function(redeemScript, prevOutputScript){
     return o.script.toString() === prevOutputScript.toScriptHashOut().toString();
   })(
   unspentTxn.outputs);
-  if (prevOutputIndex < 0) {
+  if (!prevOutputIndex) {
     return undefined;
   }
   prevOutput = unspentTxn.outputs[prevOutputIndex];

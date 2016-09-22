@@ -78,7 +78,7 @@
                     <div class="intro-text">
                         <span class="name">PeerScript Labs</span>
                         <hr class="star-light">
-                        <p class="skills">Peercoin's <a style="color:white;">Area 51</a> for Smart Contracts</p>
+                        <p class="skills">Peercoin's <a href="https://en.wikipedia.org/wiki/Area_51" style="color:white;">Area 51</a> for Smart Contracts</p>
                     </div>
                     <small>1PSL24dCfmy3qTExQuaWCpSSRVmVgj2SsA<br/>PScript9dhNxV5xHGwwcjknh9sxe6s4tVX</small>
                 </div>
@@ -131,6 +131,11 @@
                 </div>
 
                 <div id="run" style="min-height:50px;"></div>
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <a href="https://github.com/hrobeers/peerscript-labs" class="btn btn-primary">
+                        <i class="fa fa-edit"></i> Enter the Lab
+                    </a>
+                </div>
                 <div id="mocha"></div>
 
                 <!-- <div class="col-sm-4 portfolio-item">
@@ -180,13 +185,13 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <p>PeerScript labs is Peercoin's Area 51 for smart contracts.
                     It is a test ground for the development of specialized Peercoin transaction scripts.
-                    Other projects benefit form PeerScript Labs integrating scripts developed and proven on this test ground.</p>
+                    Other projects benefit from PeerScript Labs integrating scripts developed and proven on this test ground.</p>
                 </div>
                 <!-- <div class="col-lg-4">
                     <p>Whether you're a student looking to showcase your work, a professional looking to attract clients, or a graphic artist looking to share your projects, this template is the perfect starting point!</p>
                 </div> -->
                 <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <a href="#" class="btn btn-lg btn-outline">
+                    <a href="#support" class="btn btn-lg btn-outline">
                         <!-- <i class="fa fa-download"></i> -->Support PeerScript Labs
                     </a>
                 </div>
@@ -217,7 +222,7 @@
               <!-- <div class="col-lg-4 col-md-6 text-center"> -->
               <div class="col-md-6 text-center">
                 <div class="service-box">
-                  <a href="https://github.com/hrobeers/peerscript-labs" class="btn">
+                  <a class="btn">
                     <i class="fa fa-4x fa-bitcoin wow bounceIn text-primary" data-wow-delay=".2s"></i>
                   </a>
                   <h3>Donate</h3>
@@ -246,6 +251,9 @@
                             </li>
                             <li>
                                 <a href="https://peercoin.chat/channel/peerscript-labs" class="btn-social btn-outline"><i class="fa fa-fw fa-rocket"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/hrobeers/peerscript-labs" class="btn-social btn-outline"><i class="fa fa-fw fa-github"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -440,7 +448,7 @@
 
                             <ul class="list-inline item-details">
                                 <li>
-                                  <button type="button" class="btn btn-primary" onclick="run('transactions')"><i class="fa fa-play"></i> Run Transactions</button>
+                                  <button type="button" class="btn btn-primary" onclick="run('Transactions')"><i class="fa fa-play"></i> Run Transactions</button>
                                 </li>
                                 <li>
                                   <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
@@ -516,7 +524,7 @@
 
       var run = function(toRun) {
         window.location.hash = '#run';
-        window.location = 'http://localhost:3334/?grep=' + toRun + '#run';
+        window.location = '?grep=' + toRun + '#run';
       }
     </script>
 

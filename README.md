@@ -19,7 +19,7 @@ We are working on getting relaxed P2SH rules into the peercoin protocol, in the 
 * `npm test` — Runs all scripts in the terminal.
 
 ### Solve & create script puzzles:
-* All puzzles are defined in`app/puzzles/all.ls`.
+* All puzzles are defined in`app/puzzles/all.js`.
 * To solve a puzzle, figure out the unlock script and run the script in the browser or using `npm test`.
   Unsolved puzzles should reference txnids that lock funds using that puzzle.
   Spend the puzzle by entering the receiving address and the raw transaction in `app/config.js`.
@@ -27,7 +27,7 @@ We are working on getting relaxed P2SH rules into the peercoin protocol, in the 
   If you did the above and solved the puzzle correctly, you should get a raw `Redeem txn` in the javascript console.
   Broadcast that transaction using `sendrawtransaction <txnid>, 1`, the second argument 1 makes sure the transaction is checked for validity.
   After spending a solved puzzle, please consider creating a new puzzle for others to solve.
-* To create a puzzle, specify a lock script in `app/puzzles/all.ls`.
+* To create a puzzle, specify a lock script in `app/puzzles/all.js`.
   Make sure to verify your solution to make sure it works correctly.
   You should get a `P2SH address` in the javascript console, pay to that address using your peercoin client to lock funds with that puzzle.
   Add a comment with the txnid you locked funds with next to the puzzle specification, for others to solve your puzzle.

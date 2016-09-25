@@ -1,9 +1,9 @@
 # PeerScript labs
 
 PeerScript labs is Peercoin's Area 51 for smart contracts. It is a test ground for the development of specialized Peercoin transaction scripts.
-Other projects benefit form PeerScript Labs by integrating scripts developed and proven on this test ground.
+Other projects benefit from PeerScript Labs by integrating scripts developed and proven on this test ground.
 
-Currently these scripts work well on testnet. On mainnet, spending non-standard P2SH transactions are processed at lower rate as the should be processed by the [PARS](https://www.peercointalk.org/index.php?topic=4684.0) nodes.
+Currently these scripts work well on testnet. On mainnet, spending non-standard P2SH transactions are processed at lower rate as they should be processed by the [PARS](https://www.peercointalk.org/index.php?topic=4684.0) nodes.
 We are working on getting relaxed P2SH rules into the peercoin protocol, in the mean time you can help these scripts on mainnet by minting using a [PARS client](https://github.com/hrobeers/peercoin-advanced-relay).
 
 

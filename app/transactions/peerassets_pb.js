@@ -352,6 +352,7 @@ proto.CardTransfer.toObject = function(includeInstance, msg) {
   var f, obj = {
     version: msg.getVersion(),
     amount: msg.getAmount(),
+    numberOfDecimals: msg.getNumberOfDecimals(),
     freeData: msg.getFreeData_asB64()
   };
 
@@ -398,6 +399,10 @@ proto.CardTransfer.deserializeBinaryFromReader = function(msg, reader) {
       msg.setAmount(value);
       break;
     case 3:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setNumberOfDecimals(value);
+      break;
+    case 4:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setFreeData(value);
       break;
@@ -453,10 +458,17 @@ proto.CardTransfer.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
+  f = this.getNumberOfDecimals();
+  if (f !== 0) {
+    writer.writeUint32(
+      3,
+      f
+    );
+  }
   f = this.getFreeData_asU8();
   if (f.length > 0) {
     writer.writeBytes(
-      3,
+      4,
       f
     );
   }
@@ -503,16 +515,31 @@ proto.CardTransfer.prototype.setAmount = function(value) {
 
 
 /**
- * optional bytes free_data = 3;
- * @return {!(string|Uint8Array)}
+ * optional uint32 number_of_decimals = 3;
+ * @return {number}
  */
-proto.CardTransfer.prototype.getFreeData = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldProto3(this, 3, ""));
+proto.CardTransfer.prototype.getNumberOfDecimals = function() {
+  return /** @type {number} */ (jspb.Message.getFieldProto3(this, 3, 0));
+};
+
+
+/** @param {number} value  */
+proto.CardTransfer.prototype.setNumberOfDecimals = function(value) {
+  jspb.Message.setField(this, 3, value);
 };
 
 
 /**
- * optional bytes free_data = 3;
+ * optional bytes free_data = 4;
+ * @return {!(string|Uint8Array)}
+ */
+proto.CardTransfer.prototype.getFreeData = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldProto3(this, 4, ""));
+};
+
+
+/**
+ * optional bytes free_data = 4;
  * This is a type-conversion wrapper around `getFreeData()`
  * @return {string}
  */
@@ -523,7 +550,7 @@ proto.CardTransfer.prototype.getFreeData_asB64 = function() {
 
 
 /**
- * optional bytes free_data = 3;
+ * optional bytes free_data = 4;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getFreeData()`
@@ -537,7 +564,7 @@ proto.CardTransfer.prototype.getFreeData_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value  */
 proto.CardTransfer.prototype.setFreeData = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setField(this, 4, value);
 };
 
 

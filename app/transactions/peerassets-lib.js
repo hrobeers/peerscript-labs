@@ -29,18 +29,36 @@ setup = function(PPCtestnet, PAtest) {
 };
 setup(); // Defaults to mainnet & PAprod
 
+var createDeckSpawnTransaction = function(utxo, shortName, numberOfDecimals, issueModes) {
+  var deckSpawnTxn = new Transaction()
+  .from(utxo)                           // vin[0]
+  .to(deckSpawnTagHash, minTagFee)      // vout[0]
+  .addData(new Buffer(createDeckSpawnMessage(shortName, numberOfDecimals, issueModes)))  // vout[1]
+  // free format from here, typically a change Output
+  .to(utxo.address, utxo.satoshis-minTagFee-txnFee);  // vout[2]
+
+  return deckSpawnTxn;
+};
+
+var decodeDeckSpawnTransaction = function(transaction) {
+  // Test for validity
+  // TODO: error handling
+  var outputs = transaction.outputs;
+  if (outputs.length < 2) return undefined;
+  if (!outputs[0].script.isPublicKeyHashOut() && !outputs[0].script.isScriptHashOut()) return undefined;
+  if (!outputs[1].script.isDataOut()) return undefined;
+
+  var retVal = decodeDeckSpawnMessage(outputs[1].script.getData());
+  retVal.assetId = transaction.id;
+
+  return retVal;
+}
+
 module.exports = {
   setup: setup,
-  createDeckSpawnTransaction: function(utxo, shortName, numberOfDecimals, issueOnce) {
-    var deckSpawnTxn = new Transaction()
-    .from(utxo)                           // vin[0]
-    .to(deckSpawnTagHash, minTagFee)      // vout[0]
-    .addData(new Buffer(createDeckSpawnMessage(shortName, numberOfDecimals, issueOnce)))  // vout[1]
-    // free format from here, typically a change Output
-    .to(utxo.address, utxo.satoshis-minTagFee-txnFee);  // vout[2]
-
-    return deckSpawnTxn;
-  },
+  ISSUE_MODE: pb.DeckSpawn.MODE,
+  createDeckSpawnTransaction: createDeckSpawnTransaction,
+  decodeDeckSpawnTransaction: decodeDeckSpawnTransaction,
   createCardTransferTransaction: function(utxo, receiver, amount) {
 
   },
@@ -49,11 +67,43 @@ module.exports = {
   }
 }
 
-createDeckSpawnMessage = function(shortName, numberOfDecimals, issueOnce) {
+createDeckSpawnMessage = function(shortName, numberOfDecimals, issueModes) {
   var ds = new pb.DeckSpawn();
   ds.setVersion(1);
   ds.setShortName(shortName);
   ds.setNumberOfDecimals(numberOfDecimals);
-  ds.setIssueOnce(issueOnce);
+
+  if (typeof issueModes == 'number') {
+    ds.setIssueMode(issueModes);
+  }
+  else if (issueModes.length && typeof issueModes[0] == 'number') {
+    var issueMode = 0;
+    for (var i=0; i<issueModes.length; i++)
+      issueMode = issueMode ^ issueModes[i];
+    ds.setIssueMode(issueMode);
+  }
+  else {
+    return undefined; // TODO: imlement array of strings & error handling
+  }
+
   return ds.serializeBinary();
+}
+
+decodeDeckSpawnMessage = function(message) {
+  var ds = pb.DeckSpawn.deserializeBinary(new Uint8Array(message));
+  var issueMode = ds.getIssueMode();
+
+  return {
+    version: ds.getVersion(),
+    shortName: ds.getShortName(),
+    numberOfDecimals: ds.getNumberOfDecimals(),
+    issueMode: issueMode,
+    getIssueModes: function() {
+      var issueModes = [];
+      for (var mode in pb.DeckSpawn.MODE)
+        if (issueMode & pb.DeckSpawn.MODE[mode])
+          issueModes.push(mode);
+      return issueModes;
+    }
+  }
 }

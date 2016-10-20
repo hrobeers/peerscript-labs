@@ -62,7 +62,7 @@ proto.DeckSpawn.toObject = function(includeInstance, msg) {
     shortName: msg.getShortName(),
     numberOfDecimals: msg.getNumberOfDecimals(),
     issueMode: msg.getIssueMode(),
-    freeData: msg.getFreeData_asB64()
+    assetSpecificData: msg.getAssetSpecificData_asB64()
   };
 
   if (includeInstance) {
@@ -117,7 +117,7 @@ proto.DeckSpawn.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 5:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setFreeData(value);
+      msg.setAssetSpecificData(value);
       break;
     default:
       reader.skipField();
@@ -185,7 +185,7 @@ proto.DeckSpawn.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
-  f = this.getFreeData_asU8();
+  f = this.getAssetSpecificData_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       5,
@@ -265,40 +265,40 @@ proto.DeckSpawn.prototype.setIssueMode = function(value) {
 
 
 /**
- * optional bytes free_data = 5;
+ * optional bytes asset_specific_data = 5;
  * @return {!(string|Uint8Array)}
  */
-proto.DeckSpawn.prototype.getFreeData = function() {
+proto.DeckSpawn.prototype.getAssetSpecificData = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldProto3(this, 5, ""));
 };
 
 
 /**
- * optional bytes free_data = 5;
- * This is a type-conversion wrapper around `getFreeData()`
+ * optional bytes asset_specific_data = 5;
+ * This is a type-conversion wrapper around `getAssetSpecificData()`
  * @return {string}
  */
-proto.DeckSpawn.prototype.getFreeData_asB64 = function() {
+proto.DeckSpawn.prototype.getAssetSpecificData_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getFreeData()));
+      this.getAssetSpecificData()));
 };
 
 
 /**
- * optional bytes free_data = 5;
+ * optional bytes asset_specific_data = 5;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getFreeData()`
+ * This is a type-conversion wrapper around `getAssetSpecificData()`
  * @return {!Uint8Array}
  */
-proto.DeckSpawn.prototype.getFreeData_asU8 = function() {
+proto.DeckSpawn.prototype.getAssetSpecificData_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getFreeData()));
+      this.getAssetSpecificData()));
 };
 
 
 /** @param {!(string|Uint8Array)} value  */
-proto.DeckSpawn.prototype.setFreeData = function(value) {
+proto.DeckSpawn.prototype.setAssetSpecificData = function(value) {
   jspb.Message.setField(this, 5, value);
 };
 
@@ -310,8 +310,7 @@ proto.DeckSpawn.MODE = {
   NONE: 0,
   CUSTOM: 1,
   ONCE: 2,
-  MULTI: 4,
-  PEG: 8
+  MULTI: 4
 };
 
 
@@ -363,7 +362,7 @@ proto.CardTransfer.toObject = function(includeInstance, msg) {
     version: msg.getVersion(),
     amount: msg.getAmount(),
     numberOfDecimals: msg.getNumberOfDecimals(),
-    freeData: msg.getFreeData_asB64()
+    assetSpecificData: msg.getAssetSpecificData_asB64()
   };
 
   if (includeInstance) {
@@ -414,7 +413,7 @@ proto.CardTransfer.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 4:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setFreeData(value);
+      msg.setAssetSpecificData(value);
       break;
     default:
       reader.skipField();
@@ -475,7 +474,7 @@ proto.CardTransfer.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
-  f = this.getFreeData_asU8();
+  f = this.getAssetSpecificData_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       4,
@@ -540,40 +539,40 @@ proto.CardTransfer.prototype.setNumberOfDecimals = function(value) {
 
 
 /**
- * optional bytes free_data = 4;
+ * optional bytes asset_specific_data = 4;
  * @return {!(string|Uint8Array)}
  */
-proto.CardTransfer.prototype.getFreeData = function() {
+proto.CardTransfer.prototype.getAssetSpecificData = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldProto3(this, 4, ""));
 };
 
 
 /**
- * optional bytes free_data = 4;
- * This is a type-conversion wrapper around `getFreeData()`
+ * optional bytes asset_specific_data = 4;
+ * This is a type-conversion wrapper around `getAssetSpecificData()`
  * @return {string}
  */
-proto.CardTransfer.prototype.getFreeData_asB64 = function() {
+proto.CardTransfer.prototype.getAssetSpecificData_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getFreeData()));
+      this.getAssetSpecificData()));
 };
 
 
 /**
- * optional bytes free_data = 4;
+ * optional bytes asset_specific_data = 4;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getFreeData()`
+ * This is a type-conversion wrapper around `getAssetSpecificData()`
  * @return {!Uint8Array}
  */
-proto.CardTransfer.prototype.getFreeData_asU8 = function() {
+proto.CardTransfer.prototype.getAssetSpecificData_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getFreeData()));
+      this.getAssetSpecificData()));
 };
 
 
 /** @param {!(string|Uint8Array)} value  */
-proto.CardTransfer.prototype.setFreeData = function(value) {
+proto.CardTransfer.prototype.setAssetSpecificData = function(value) {
   jspb.Message.setField(this, 4, value);
 };
 

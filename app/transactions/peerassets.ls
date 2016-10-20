@@ -19,7 +19,7 @@ describe 'PeerAssets', ->
     deck-spawn-txn = utxo
     |> pa.createDeckSpawnTransaction _, asset-short-name, number-of-decimals, [
       pa.ISSUE_MODE.ONCE,
-      pa.ISSUE_MODE.PEG
+      pa.ISSUE_MODE.CUSTOM
     ]
 
     # Decode deck spawn transaction
@@ -30,15 +30,15 @@ describe 'PeerAssets', ->
     assert.equal decoded-deck-spawn-txn.shortName, asset-short-name, 'Failed to decode asset short name'
     assert.equal decoded-deck-spawn-txn.number-of-decimals, number-of-decimals, 'Failed to decode number of decimals'
     assert decoded-deck-spawn-txn.issue-mode .&. pa.ISSUE_MODE.ONCE, 'Failed to check ONCE flag'
-    assert decoded-deck-spawn-txn.issue-mode .&. pa.ISSUE_MODE.PEG, 'Failed to check PEG flag'
-    assert.deepEqual decoded-deck-spawn-txn.get-issue-modes(), ['ONCE', 'PEG'], 'Failed to get issue mode list'
+    assert decoded-deck-spawn-txn.issue-mode .&. pa.ISSUE_MODE.CUSTOM, 'Failed to check MULTI flag'
+    assert.deepEqual decoded-deck-spawn-txn.get-issue-modes(), ['CUSTOM', 'ONCE'], 'Failed to get issue mode list'
 
     # Make sure bitwise combination of issue modes serializes equally
     deck-spawn-txn2 = utxo
     |> pa.createDeckSpawnTransaction _,
         asset-short-name,
         number-of-decimals,
-        pa.ISSUE_MODE.ONCE .^. pa.ISSUE_MODE.PEG
+        pa.ISSUE_MODE.ONCE .^. pa.ISSUE_MODE.CUSTOM
     assert.equal deck-spawn-txn2.serialize(true), deck-spawn-txn.serialize(true)
 
     done()

@@ -5,7 +5,7 @@ var Transaction = bitcore.Transaction;
 var Input = Transaction.Input;
 var Output = Transaction.Output;
 
-var minTagFee = 5000; // 0.005PPC
+var minTagFee = 10000; // 0.01PPC
 var txnFee = 10000;   // 0.01PPC
 
 // P2TH info
@@ -18,6 +18,7 @@ var txnFee = 10000;   // 0.01PPC
 
 var deckSpawnTagHash = undefined;
 setup = function(PPCtestnet, PAtest) {
+  // Setup the deck spawn tag hash
   if (!PPCtestnet && !PAtest)
     deckSpawnTagHash = 'PAprodpH5y2YuJFHFCXWRuVzZNr7Tw78sV';
   else if (!PPCtestnet && PAtest)
@@ -25,7 +26,19 @@ setup = function(PPCtestnet, PAtest) {
   else if (PPCtestnet && !PAtest)
     deckSpawnTagHash = 'miYNy9BbMkQ8Y5VaRDor4mgH5b3FEzVySr';
   else if (PPCtestnet && PAtest)
-    deckSpawnTagHash = 'mwqncWSnzUzouPZcLQWcLTPuSVq3rSiAAa';
+      deckSpawnTagHash = 'mwqncWSnzUzouPZcLQWcLTPuSVq3rSiAAa';
+
+  // Add getUnspentOutput function to Transaction object
+  Transaction.prototype.getUnspentOutput = function(outputIndex) {
+    var output = this.outputs[outputIndex];
+    return new Transaction.UnspentOutput({
+      outputIndex: outputIndex,
+      satoshis: output.satoshis,
+      script: output.script,
+      txId: this.id,
+      address: output.script.toAddress().toString()
+    });
+  }
 };
 setup(); // Defaults to mainnet & PAprod
 

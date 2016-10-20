@@ -5,13 +5,8 @@ pa = require './peerassets-lib'
 
 asset-owner-private-key = new PrivateKey()
 
-utxo = new Transaction.UnspentOutput {
-  outputIndex: 0
-  satoshis:100000
-  address:asset-owner-private-key.to-public-key().to-address()
-  script:Script.buildPublicKeyHashOut asset-owner-private-key.to-public-key()
-  txId:'5d2fe2bd42b8de6451d42709b4a2f7f97f15485090b932b081d147e9d4cc754b'
-}
+prev-txn = new Transaction().to(asset-owner-private-key.to-public-key().to-address(), 10000000)
+utxo = prev-txn.get-unspent-output 0
 
 pa.setup true, true
 

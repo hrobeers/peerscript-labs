@@ -1,2 +1,2 @@
 describe 'Transactions', ->
-  require './p2pkh'
+  require './peerassets'

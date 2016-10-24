@@ -56,6 +56,7 @@ var createDeckSpawnTransaction = function(utxo, shortName, numberOfDecimals, iss
 var decodeDeckSpawnTransaction = function(transaction) {
   // Test for validity
   // TODO: error handling
+  var inputs = transaction.inputs
   var outputs = transaction.outputs;
   if (outputs.length < 2) return undefined;
   if (!outputs[0].script.isPublicKeyHashOut()) return undefined;
@@ -63,6 +64,7 @@ var decodeDeckSpawnTransaction = function(transaction) {
 
   var retVal = decodeDeckSpawnMessage(outputs[1].script.getData());
   retVal.assetId = transaction.id;
+  retVal.owner = inputs[0].script.toAddress().toString();
 
   return retVal;
 }

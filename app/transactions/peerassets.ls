@@ -22,12 +22,14 @@ describe 'PeerAssets', ->
       pa.ISSUE_MODE.ONCE,
       pa.ISSUE_MODE.CUSTOM
     ]
+    deck-spawn-txn.sign asset-owner-private-key
 
     # Decode deck spawn transaction
     decoded-deck-spawn-txn = deck-spawn-txn
     |> pa.decodeDeckSpawnTransaction _
 
     # Check encoded asset data
+    assert.equal decoded-deck-spawn-txn.owner, asset-owner-private-key.to-address().to-string(), 'Failed to decode asset owner'
     assert.equal decoded-deck-spawn-txn.shortName, asset-short-name, 'Failed to decode asset short name'
     assert.equal decoded-deck-spawn-txn.number-of-decimals, number-of-decimals, 'Failed to decode number of decimals'
     assert decoded-deck-spawn-txn.issue-mode .&. pa.ISSUE_MODE.ONCE, 'Failed to check ONCE flag'
@@ -40,6 +42,8 @@ describe 'PeerAssets', ->
         asset-short-name,
         number-of-decimals,
         pa.ISSUE_MODE.ONCE .^. pa.ISSUE_MODE.CUSTOM
+    deck-spawn-txn2.sign asset-owner-private-key
+
     assert.equal deck-spawn-txn2.serialize(true), deck-spawn-txn.serialize(true)
 
     done()

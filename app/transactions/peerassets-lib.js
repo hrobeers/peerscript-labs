@@ -44,9 +44,9 @@ setup(); // Defaults to mainnet & PAprod
 
 var createDeckSpawnTransaction = function(utxo, shortName, numberOfDecimals, issueModes) {
   var deckSpawnTxn = new Transaction()
-  .from(utxo)                           // vin[0]
-  .to(deckSpawnTagHash, minTagFee)      // vout[0]
-  .addData(new Buffer(createDeckSpawnMessage(shortName, numberOfDecimals, issueModes)))  // vout[1]
+  .from(utxo)                           // vin[0]: Owner signature
+  .to(deckSpawnTagHash, minTagFee)      // vout[0]: Deck spawn P2TH
+  .addData(createDeckSpawnMessage(shortName, numberOfDecimals, issueModes))  // vout[1]: Asset data
   // free format from here, typically a change Output
   .to(utxo.address, utxo.satoshis-minTagFee-txnFee);  // vout[2]
 
@@ -58,11 +58,40 @@ var decodeDeckSpawnTransaction = function(transaction) {
   // TODO: error handling
   var outputs = transaction.outputs;
   if (outputs.length < 2) return undefined;
-  if (!outputs[0].script.isPublicKeyHashOut() && !outputs[0].script.isScriptHashOut()) return undefined;
+  if (!outputs[0].script.isPublicKeyHashOut()) return undefined;
   if (!outputs[1].script.isDataOut()) return undefined;
 
   var retVal = decodeDeckSpawnMessage(outputs[1].script.getData());
   retVal.assetId = transaction.id;
+
+  return retVal;
+}
+
+var createCardTransferTransaction = function(utxo, receiver, amount, deckSpawnTxn) {
+  var cardTransferTxn = new Transaction()
+  .from(utxo)                             // vin[0]: Sending party signature
+  .to(receiver, minTagFee)                // vout[0]: Receiving party
+  .to(assetTag(deckSpawnTxn), minTagFee)  // vout[1]: Asset P2TH
+  .addData(createCardTransferMessage(amount, deckSpawnTxn))  // vout[2]: Transfer data
+  // free format from here, typically a change Output
+  .to(utxo.address, utxo.satoshis-minTagFee-minTagFee-txnFee);  // vout[3]
+
+  return cardTransferTxn;
+}
+
+var decodeCardTransferTransaction = function(transaction) {
+  // Test for validity
+  // TODO: error handling
+  var inputs = transaction.inputs;
+  var outputs = transaction.outputs;
+  if (outputs.length < 3) return undefined;
+  if (!outputs[0].script.isPublicKeyHashOut() && !outputs[0].script.isScriptHashOut()) return undefined;
+  if (!outputs[1].script.isPublicKeyHashOut()) return undefined;
+  if (!outputs[2].script.isDataOut()) return undefined;
+
+  var retVal = decodeCardTransferMessage(outputs[2].script.getData());
+  retVal.from = inputs[0].script.toAddress().toString();
+  retVal.to = outputs[0].script.toAddress().toString();
 
   return retVal;
 }
@@ -72,15 +101,14 @@ module.exports = {
   ISSUE_MODE: pb.DeckSpawn.MODE,
   createDeckSpawnTransaction: createDeckSpawnTransaction,
   decodeDeckSpawnTransaction: decodeDeckSpawnTransaction,
-  createCardTransferTransaction: function(utxo, receiver, amount) {
-
-  },
+  createCardTransferTransaction: createCardTransferTransaction,
+  decodeCardTransferTransaction: decodeCardTransferTransaction,
   createCardBurnTransaction: function(utxo, amount) {
 
   }
 }
 
-createDeckSpawnMessage = function(shortName, numberOfDecimals, issueModes) {
+var createDeckSpawnMessage = function(shortName, numberOfDecimals, issueModes) {
   var ds = new pb.DeckSpawn();
   ds.setVersion(1);
   ds.setShortName(shortName);
@@ -99,10 +127,10 @@ createDeckSpawnMessage = function(shortName, numberOfDecimals, issueModes) {
     return undefined; // TODO: imlement array of strings & error handling
   }
 
-  return ds.serializeBinary();
+  return new Buffer(ds.serializeBinary());
 }
 
-decodeDeckSpawnMessage = function(message) {
+var decodeDeckSpawnMessage = function(message) {
   var ds = pb.DeckSpawn.deserializeBinary(new Uint8Array(message));
   var issueMode = ds.getIssueMode();
 
@@ -118,5 +146,29 @@ decodeDeckSpawnMessage = function(message) {
           issueModes.push(mode);
       return issueModes;
     }
+  }
+}
+
+var assetTag = function(deckSpawnTxn) {
+  return new bitcore.PrivateKey(deckSpawnTxn.id).toPublicKey().toAddress();
+}
+
+var createCardTransferMessage = function(amount, deckSpawnTxn) {
+  var decoded = decodeDeckSpawnTransaction(deckSpawnTxn);
+  if (!decoded) return undefined;
+
+  var ct = new pb.CardTransfer();
+  ct.setAmount(amount);
+  ct.setNumberOfDecimals(decoded.numberOfDecimals);
+
+  return new Buffer(ct.serializeBinary());
+}
+
+var decodeCardTransferMessage = function(message) {
+  var ds = pb.CardTransfer.deserializeBinary(new Uint8Array(message));
+
+  return {
+    amount: ds.getAmount(),
+    numberOfDecimals: ds.getNumberOfDecimals()
   }
 }

@@ -4,19 +4,20 @@ pa = require './peerassets-lib'
 { assert } = require 'chai'
 
 asset-owner-private-key = new PrivateKey()
-
 prev-txn = new Transaction().to(asset-owner-private-key.to-public-key().to-address(), 10000000)
 utxo = prev-txn.get-unspent-output 0
 
 pa.setup true, true
 
+deck-spawn-txn = undefined
+number-of-decimals = 2
+
 describe 'PeerAssets', ->
   specify 'Deck spawn', (done) ->
     asset-short-name = 'hello'
-    number-of-decimals = 2
 
     # Create deck spawn transaction
-    deck-spawn-txn = utxo
+    deck-spawn-txn := utxo
     |> pa.createDeckSpawnTransaction _, asset-short-name, number-of-decimals, [
       pa.ISSUE_MODE.ONCE,
       pa.ISSUE_MODE.CUSTOM
@@ -40,5 +41,29 @@ describe 'PeerAssets', ->
         number-of-decimals,
         pa.ISSUE_MODE.ONCE .^. pa.ISSUE_MODE.CUSTOM
     assert.equal deck-spawn-txn2.serialize(true), deck-spawn-txn.serialize(true)
+
+    done()
+
+  specify 'Card transfer', (done) ->
+    # random sender
+    sender = new PrivateKey()
+    prev-txn = new Transaction().to(sender.to-address(), 10000000)
+    utxo = prev-txn.get-unspent-output 0
+    # random receiver
+    receiver-address = new PrivateKey().to-address().to-string()
+    amount = 123
+
+    # Create a card transfer transaction
+    transfer-txn = pa.createCardTransferTransaction(utxo, receiver-address, amount, deck-spawn-txn)
+                     .sign(sender)
+
+    # Decode the card transfer transaction
+    decoded-transfer-txn = pa.decodeCardTransferTransaction(transfer-txn)
+
+    # Check encoded transfer data
+    assert.equal decoded-transfer-txn.from, sender.to-address().to-string(), 'Failed to decode transfer sender'
+    assert.equal decoded-transfer-txn.to, receiver-address, 'Failed to decode transfer receiver'
+    assert.equal decoded-transfer-txn.amount, amount, 'Failed to decode transfer amount'
+    assert.equal decoded-transfer-txn.number-of-decimals, number-of-decimals, 'Failed to decode transfer amount'
 
     done()

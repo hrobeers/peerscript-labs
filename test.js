@@ -182,7 +182,6 @@ module.exports = {
 });
 
 ;require.alias("assert/assert.js", "assert");
-require.alias("buffer/index.js", "buffer");
 require.alias("crypto-browserify/index.js", "crypto");
 require.alias("events/events.js", "events");
 require.alias("process/browser.js", "process");

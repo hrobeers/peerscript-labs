@@ -1,4 +1,4 @@
-pa = require './peerassets-lib'
+pa = require '../lib/peerassets/peerassets'
 
 { Transaction, Script, PrivateKey } = require 'bitcore-lib'
 { assert } = require 'chai'

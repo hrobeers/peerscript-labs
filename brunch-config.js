@@ -10,5 +10,8 @@ module.exports = {
     },
     stylesheets: {joinTo: 'app.css'},
     // templates: {joinTo: 'app.js'}
+  },
+  conventions: {
+    assets: /.[\\/]assets[\\/]/  // vendor/jquery/files/jq.img
   }
 }

@@ -1,5 +1,6 @@
 var pb = require('./peerassets_pb');
 var bitcore = require('bitcore-lib');
+var Buffer = require('buffer').Buffer;
 var Script = bitcore.Script;
 var Transaction = bitcore.Transaction;
 var Input = Transaction.Input;
@@ -152,7 +153,10 @@ var decodeDeckSpawnMessage = function(message) {
 }
 
 var assetTag = function(deckSpawnTxn) {
-  return new bitcore.PrivateKey(deckSpawnTxn.id).toPublicKey().toAddress();
+  // Create the compressed address for deckSpawnTxn.id
+  var binaryTxnId = Buffer.from(deckSpawnTxn.id, 'hex');
+  var bn = bitcore.crypto.BN.fromBuffer(binaryTxnId);
+  return new bitcore.PrivateKey(bn).toPublicKey().toAddress();
 }
 
 var createCardTransferMessage = function(amount, deckSpawnTxn) {

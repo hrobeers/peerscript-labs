@@ -17,12 +17,13 @@ describe 'PeerAssets', ->
     asset-short-name = 'hello'
 
     # Create deck spawn transaction
-    deck-spawn-txn := pa.createDeckSpawnTransaction(
+    unsigned-deck-spawn = pa.createDeckSpawnTransaction(
       utxo,
       asset-short-name,
       number-of-decimals,
       [ pa.ISSUE_MODE.ONCE, pa.ISSUE_MODE.CUSTOM ]
-    ).sign(asset-owner-private-key)
+    )
+    deck-spawn-txn := unsigned-deck-spawn.sign(asset-owner-private-key)
 
     # Decode deck spawn transaction
     decoded-deck-spawn-txn = pa.decodeDeckSpawnTransaction(deck-spawn-txn)
@@ -36,14 +37,15 @@ describe 'PeerAssets', ->
     assert.deepEqual decoded-deck-spawn-txn.get-issue-modes(), ['CUSTOM', 'ONCE'], 'Failed to get issue mode list'
 
     # Make sure bitwise combination of issue modes serializes equally
-    deck-spawn-txn2 = pa.createDeckSpawnTransaction(
+    unsigned-deck-spawn2 = pa.createDeckSpawnTransaction(
       utxo,
       asset-short-name,
       number-of-decimals,
       pa.ISSUE_MODE.ONCE .^. pa.ISSUE_MODE.CUSTOM
-    ).sign(asset-owner-private-key)
+    )
+    deck-spawn-txn2 = unsigned-deck-spawn2.sign(asset-owner-private-key)
 
-    assert.equal deck-spawn-txn2.serialize(true), deck-spawn-txn.serialize(true)
+    assert.equal unsigned-deck-spawn2.serialize(true), unsigned-deck-spawn.serialize(true)
 
     done()
 

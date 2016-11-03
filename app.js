@@ -149,7 +149,75 @@ var __makeRelativeRequire = function(require, mappings, pref) {
     return require(name);
   }
 };
-require.register("bitcore-ppc.js", function(exports, require, module) {
+require.register("config.js", function(exports, require, module) {
+// PeerScript-labs configuration file
+//
+// This file specifies the addresses and outputs the scripts should spend from or redeem to.
+// Make sure not to push changes to this file in to source control to guarantee your privacy.
+// This file should already be added to .gitignore
+
+module.exports = {
+  // The address to redeem funds to.
+  // Used for creating the redeem Transaction
+  redeemAddress: 'n1aFBt9ow45dEpEzYSsEr9epff2mML1cbt',
+
+  // The raw transaction to redeem from (hex encoded, use "getrawtransaction to get it")
+  redeemTransaction: '0100000056dde0570237c62f168a8e110b06a100e9010a667bcc1c9a78599735af565a9f6c8db99e480200000048473044022037ce8702f2fc4645f6e4345cb542393b12a9c78b339738c24585d40901ecfdb302206db4ab9ba82d973e038b1567b5fbc0d919abb842fe122c116d277757744162be01ffffffff4cc5e53cfce1de29c59b01ae90959c514f23e4ef7c8ccf46e18aac9cd9097136000000006c493046022100a94d3ff90b1b3d7bc992800376df5a23648ba264c7de94651c232ac7ebfedc300221008547c38bbe33ca25a236c19957d6385935e6738e3f1d959d2b80f0e2c3f9841a0121031ede890b89e56930768d41c0b46ab7416d0cb8a9f56cce71c321f6ae03004b33ffffffff0260a0821d000000001976a9145588e371c904f7a4d288c8b977090270686804d688ac005ed0b20000000017a9142a02dfd19c9108ad48878a01bfe53deaaf30cca48700000000',
+
+  // Configure for testnet
+  testnet: true,
+}
+
+});
+
+;require.register("contracts/all.ls", function(exports, require, module) {
+describe('Smart Contracts', function(){
+  describe('Escrow and dispute mediation', function(){
+    return specify('Coming soon', function(done){
+      return done();
+    });
+  });
+  describe('Assurance contracts', function(){
+    return specify('Coming soon', function(done){
+      return done();
+    });
+  });
+  describe('Using external state', function(){
+    return specify('Coming soon', function(done){
+      return done();
+    });
+  });
+  describe('Trading across chains', function(){
+    return specify('Coming soon', function(done){
+      return done();
+    });
+  });
+  return describe('And more', function(){
+    return specify('Coming soon', function(done){
+      return done();
+    });
+  });
+});
+});
+
+;require.register("initialize.js", function(exports, require, module) {
+// Include the tests to be run
+require('../test/all');
+
+// Make sure buffer is compiled into vendor.js
+require('buffer');
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.mochaPhantomJS) {
+    mochaPhantomJS.run();
+  } else {
+    mocha.run();
+  }
+});
+
+});
+
+require.register("lib/bitcore-ppc/bitcore-ppc.js", function(exports, require, module) {
 // Copyright (c) 2016 hrobeers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -248,209 +316,10 @@ Transaction.prototype.fromBufferReader = function(reader) {
 
 });
 
-require.register("config.js", function(exports, require, module) {
-// PeerScript-labs configuration file
-//
-// This file specifies the addresses and outputs the scripts should spend from or redeem to.
-// Make sure not to push changes to this file in to source control to guarantee your privacy.
-// This file should already be added to .gitignore
-
-module.exports = {
-  // The address to redeem funds to.
-  // Used for creating the redeem Transaction
-  redeemAddress: 'n1aFBt9ow45dEpEzYSsEr9epff2mML1cbt',
-
-  // The raw transaction to redeem from (hex encoded, use "getrawtransaction to get it")
-  redeemTransaction: '0100000056dde0570237c62f168a8e110b06a100e9010a667bcc1c9a78599735af565a9f6c8db99e480200000048473044022037ce8702f2fc4645f6e4345cb542393b12a9c78b339738c24585d40901ecfdb302206db4ab9ba82d973e038b1567b5fbc0d919abb842fe122c116d277757744162be01ffffffff4cc5e53cfce1de29c59b01ae90959c514f23e4ef7c8ccf46e18aac9cd9097136000000006c493046022100a94d3ff90b1b3d7bc992800376df5a23648ba264c7de94651c232ac7ebfedc300221008547c38bbe33ca25a236c19957d6385935e6738e3f1d959d2b80f0e2c3f9841a0121031ede890b89e56930768d41c0b46ab7416d0cb8a9f56cce71c321f6ae03004b33ffffffff0260a0821d000000001976a9145588e371c904f7a4d288c8b977090270686804d688ac005ed0b20000000017a9142a02dfd19c9108ad48878a01bfe53deaaf30cca48700000000',
-
-  // Configure for testnet
-  testnet: true,
-}
-
-});
-
-;require.register("contracts/all.ls", function(exports, require, module) {
-describe('Smart Contracts', function(){
-  describe('Escrow and dispute mediation', function(){
-    return specify('Coming soon', function(done){
-      return done();
-    });
-  });
-  describe('Assurance contracts', function(){
-    return specify('Coming soon', function(done){
-      return done();
-    });
-  });
-  describe('Using external state', function(){
-    return specify('Coming soon', function(done){
-      return done();
-    });
-  });
-  describe('Trading across chains', function(){
-    return specify('Coming soon', function(done){
-      return done();
-    });
-  });
-  return describe('And more', function(){
-    return specify('Coming soon', function(done){
-      return done();
-    });
-  });
-});
-});
-
-;require.register("initialize.js", function(exports, require, module) {
-// Include the tests to be run
-require('../test/all');
-
-// Make sure buffer is compiled into vendor.js
-require('buffer');
-
-document.addEventListener('DOMContentLoaded', function() {
-  if (window.mochaPhantomJS) {
-    mochaPhantomJS.run();
-  } else {
-    mocha.run();
-  }
-});
-
-});
-
-require.register("puzzles/all.js", function(exports, require, module) {
-var Script = require('bitcore-lib').Script;
-var run = require('../script-runner');
-
-describe('Puzzles', function() {
-
-  specify('x + 5 = 6', function(done) {
-    // Testnet txnids locking funds with this script:
-    // 100PPC: '339bb7d4fb15e327904a1011073d8e2c3cc145325484c5775482de65599b60cf'
-    // 100PPC: '87c1979b914c5c4728d160986e01c56a6826a4f0618498a4f61a12b92848a301'
-    // 100PPC: '0df219926f5a0a27481ef367b500d7e32ab5de16df9d66687f2c2e4c33fe250c'
-    // 100PPC: '0c066e27b6ade9d2e8c1eb050dc69e410b84e295e296632f2b5e520555513e7e'
-    // 100PPC: 'c66504c4f06cb4b632da73697a59c9b74e835563904827fa95f7455238a71f57'
-    run(this, {
-      lock: Script('OP_5 OP_ADD OP_6 OP_EQUAL'),
-      unlock: Script('OP_1')
-    });
-  });
-
-  specify('x * 2 = 16', function(done) {
-    // Testnet txnids locking funds with this script:
-    // 500PPC: 'd47cc1c98d62395cebeebe7220a25272ba733e9103c5815bfd454c34a1688612'
-    // 500PPC: 'f7f36ed79a4a37bc3d5cc2ecbc804408f8bcc7174c6768bc46f7a155d1afbb35'
-    // 500PPC: '7f6b2536bf89fbe9fa1eba6b95758142804267056ec9466dcf7bbc249b074089'
-    run(this, {
-      lock: Script('OP_DUP OP_ADD OP_16 OP_EQUAL'),
-      unlock: Script('OP_NOP')
-    });
-  });
-
-  specify('if statement', function(done) {
-    // Testnet txnids locking funds with this script:
-    // 1000PPC: '31be5da0d296bf61a6575aa36785898f7026343eb130a36c8b829a41ded5a67c'
-    // 1000PPC: '3d3a68ce1b52293947f4fa2930533ecee84d753d39a843823e8e377c697b2954'
-    // 1000PPC: '084e770c4861d30272832e8055c652ae16c7dcb052cc76fb2fdc62bef2b4bcdc'
-    run(this, {
-      lock: Script('OP_5 OP_ADD')
-            .add(Script('OP_IF'))
-            .add(Script(  'OP_RETURN'))
-            .add(Script('OP_ELSE'))
-            .add(Script(  'OP_TRUE'))
-            .add(Script('OP_ENDIF')),
-      unlock: Script('OP_NOP')
-    });
-  });
-
-  specify('obfuscated stack', function(done) {
-    // Testnet txnids locking funds with this script:
-    // 3000PPC: '6ae2c662e91fe2c0850bc1ec2322198ef43d808253faaaf20b757d25aeac7a3c'
-    // 3000PPC: '2cd2068412df761c5fddf65287504a141525fe82cf9661c130e2ac3f170723a6'
-    // 3000PPC: '225ec1e840e38c5332611181ff038638b6af88b1e4d0d530aa34da58566627e7'
-    run(this, {
-      lock: Script('OP_DEPTH OP_3 OP_EQUALVERIFY')
-            .add(Script('OP_ROT OP_DUP OP_3 OP_EQUALVERIFY'))
-            .add(Script('OP_ADD OP_8 OP_EQUALVERIFY'))
-            .add(Script('OP_TRUE OP_EQUAL')),
-      unlock: Script('OP_NOP')
-    });
-  });
-});
-
-});
-
-require.register("script-runner.ls", function(exports, require, module) {
-var chai, assert, expect, should, ref$, Transaction, Script, Input, Output, Interpreter, findIndex, config, createRedeemTransaction;
-chai = require('chai');
-assert = chai.assert, expect = chai.expect, should = chai.should;
-ref$ = require('bitcore-lib'), Transaction = ref$.Transaction, Script = ref$.Script;
-Input = Transaction.Input, Output = Transaction.Output;
-Interpreter = Script.Interpreter;
-findIndex = require('prelude-ls').findIndex;
-config = require('./config');
-module.exports = function(ctx, scripts){
-  var done, groupName, scriptName, outputScript, unlockScript, redeemScript, redeemTxn;
-  done = ctx.test.callback;
-  groupName = ctx.test.parent.title;
-  scriptName = ctx.test.title;
-  outputScript = scripts.lock;
-  unlockScript = scripts.unlock;
-  console.log(
-  '\n' + groupName + ': ' + scriptName + '\n' + '  Lock script: ' + outputScript.toString() + '\n' + '  P2SH output: ' + outputScript.toScriptHashOut().toString() + '\n' + '  P2SH address: ' + outputScript.toScriptHashOut().toAddress().toString());
-  assert(Interpreter().verify(unlockScript, outputScript), 'Incorrect solution Script');
-  console.log(
-  '  Unlock script: ' + unlockScript.toString() + '\n');
-  redeemScript = function(s){
-    return s.add(outputScript);
-  }(
-  function(s){
-    return s.add(outputScript.toBuffer().length);
-  }(
-  function(s){
-    return s.add(unlockScript);
-  }(
-  Script())));
-  redeemTxn = createRedeemTransaction(redeemScript, outputScript);
-  if (redeemTxn) {
-    console.log(
-    '  Redeem script: ' + redeemScript.toString() + '\n' + '  Redeem txn: ' + redeemTxn.toString());
-  }
-  return done();
-};
-createRedeemTransaction = function(redeemScript, prevOutputScript){
-  var unspentTxn, prevOutputIndex, prevOutput, input;
-  if (!config.redeemTransaction) {
-    return undefined;
-  }
-  unspentTxn = Transaction(config.redeemTransaction);
-  prevOutputIndex = findIndex(function(o){
-    return o.script.toString() === prevOutputScript.toScriptHashOut().toString();
-  })(
-  unspentTxn.outputs);
-  if (!prevOutputIndex) {
-    return undefined;
-  }
-  prevOutput = unspentTxn.outputs[prevOutputIndex];
-  input = Input({
-    prevTxId: unspentTxn.id,
-    outputIndex: prevOutputIndex,
-    sequenceNumber: 'ffffffff',
-    script: redeemScript,
-    output: prevOutput
-  });
-  return new Transaction().addInput(input).to(config.redeemAddress, prevOutput.satoshis - 10000);
-};
-});
-
-;require.register("transactions/all.ls", function(exports, require, module) {
-describe('Transactions', function(){
-  return require('./peerassets');
-});
-});
-
-;require.register("transactions/peerassets-lib.js", function(exports, require, module) {
+require.register("lib/peerassets/peerassets.js", function(exports, require, module) {
 var pb = require('./peerassets_pb');
 var bitcore = require('bitcore-lib');
+var Buffer = require('buffer').Buffer;
 var Script = bitcore.Script;
 var Transaction = bitcore.Transaction;
 var Input = Transaction.Input;
@@ -603,7 +472,10 @@ var decodeDeckSpawnMessage = function(message) {
 }
 
 var assetTag = function(deckSpawnTxn) {
-  return new bitcore.PrivateKey(deckSpawnTxn.id).toPublicKey().toAddress();
+  // Create the compressed address for deckSpawnTxn.id
+  var binaryTxnId = Buffer.from(deckSpawnTxn.id, 'hex');
+  var bn = bitcore.crypto.BN.fromBuffer(binaryTxnId);
+  return new bitcore.PrivateKey(bn).toPublicKey().toAddress();
 }
 
 var createCardTransferMessage = function(amount, deckSpawnTxn) {
@@ -628,52 +500,7 @@ var decodeCardTransferMessage = function(message) {
 
 });
 
-;require.register("transactions/peerassets.ls", function(exports, require, module) {
-var pa, ref$, Transaction, Script, PrivateKey, assert, assetOwnerPrivateKey, prevTxn, utxo, deckSpawnTxn, numberOfDecimals;
-pa = require('./peerassets-lib');
-ref$ = require('bitcore-lib'), Transaction = ref$.Transaction, Script = ref$.Script, PrivateKey = ref$.PrivateKey;
-assert = require('chai').assert;
-assetOwnerPrivateKey = new PrivateKey();
-prevTxn = new Transaction().to(assetOwnerPrivateKey.toPublicKey().toAddress(), 10000000);
-utxo = prevTxn.getUnspentOutput(0);
-pa.setup(true, true);
-deckSpawnTxn = undefined;
-numberOfDecimals = 2;
-describe('PeerAssets', function(){
-  specify('Deck spawn', function(done){
-    var assetShortName, decodedDeckSpawnTxn, deckSpawnTxn2;
-    assetShortName = 'hello';
-    deckSpawnTxn = pa.createDeckSpawnTransaction(utxo, assetShortName, numberOfDecimals, [pa.ISSUE_MODE.ONCE, pa.ISSUE_MODE.CUSTOM]).sign(assetOwnerPrivateKey);
-    decodedDeckSpawnTxn = pa.decodeDeckSpawnTransaction(deckSpawnTxn);
-    assert.equal(decodedDeckSpawnTxn.owner, assetOwnerPrivateKey.toAddress().toString(), 'Failed to decode asset owner');
-    assert.equal(decodedDeckSpawnTxn.shortName, assetShortName, 'Failed to decode asset short name');
-    assert.equal(decodedDeckSpawnTxn.numberOfDecimals, numberOfDecimals, 'Failed to decode number of decimals');
-    assert(decodedDeckSpawnTxn.issueMode & pa.ISSUE_MODE.ONCE, 'Failed to check ONCE flag');
-    assert(decodedDeckSpawnTxn.issueMode & pa.ISSUE_MODE.CUSTOM, 'Failed to check MULTI flag');
-    assert.deepEqual(decodedDeckSpawnTxn.getIssueModes(), ['CUSTOM', 'ONCE'], 'Failed to get issue mode list');
-    deckSpawnTxn2 = pa.createDeckSpawnTransaction(utxo, assetShortName, numberOfDecimals, pa.ISSUE_MODE.ONCE ^ pa.ISSUE_MODE.CUSTOM).sign(assetOwnerPrivateKey);
-    assert.equal(deckSpawnTxn2.serialize(true), deckSpawnTxn.serialize(true));
-    return done();
-  });
-  return specify('Card transfer', function(done){
-    var sender, prevTxn, utxo, receiverAddress, amount, transferTxn, decodedTransferTxn;
-    sender = new PrivateKey();
-    prevTxn = new Transaction().to(sender.toAddress(), 10000000);
-    utxo = prevTxn.getUnspentOutput(0);
-    receiverAddress = new PrivateKey().toAddress().toString();
-    amount = 123;
-    transferTxn = pa.createCardTransferTransaction(utxo, receiverAddress, amount, deckSpawnTxn).sign(sender);
-    decodedTransferTxn = pa.decodeCardTransferTransaction(transferTxn);
-    assert.equal(decodedTransferTxn.from, sender.toAddress().toString(), 'Failed to decode transfer sender');
-    assert.equal(decodedTransferTxn.to, receiverAddress, 'Failed to decode transfer receiver');
-    assert.equal(decodedTransferTxn.amount, amount, 'Failed to decode transfer amount');
-    assert.equal(decodedTransferTxn.numberOfDecimals, numberOfDecimals, 'Failed to decode transfer amount');
-    return done();
-  });
-});
-});
-
-;require.register("transactions/peerassets_pb.js", function(exports, require, module) {
+;require.register("lib/peerassets/peerassets_pb.js", function(exports, require, module) {
 /**
  * @fileoverview
  * @enhanceable
@@ -1257,7 +1084,218 @@ goog.object.extend(exports, proto);
 
 });
 
-require.alias("assert/assert.js", "assert");
+require.register("puzzles/all.js", function(exports, require, module) {
+var Script = require('bitcore-lib').Script;
+var run = require('../script-runner');
+
+describe('Puzzles', function() {
+
+  specify('x + 5 = 6', function(done) {
+    // Testnet txnids locking funds with this script:
+    // 100PPC: '339bb7d4fb15e327904a1011073d8e2c3cc145325484c5775482de65599b60cf'
+    // 100PPC: '87c1979b914c5c4728d160986e01c56a6826a4f0618498a4f61a12b92848a301'
+    // 100PPC: '0df219926f5a0a27481ef367b500d7e32ab5de16df9d66687f2c2e4c33fe250c'
+    // 100PPC: '0c066e27b6ade9d2e8c1eb050dc69e410b84e295e296632f2b5e520555513e7e'
+    // 100PPC: 'c66504c4f06cb4b632da73697a59c9b74e835563904827fa95f7455238a71f57'
+    run(this, {
+      lock: Script('OP_5 OP_ADD OP_6 OP_EQUAL'),
+      unlock: Script('OP_1')
+    });
+  });
+
+  specify('x * 2 = 16', function(done) {
+    // Testnet txnids locking funds with this script:
+    // 500PPC: 'd47cc1c98d62395cebeebe7220a25272ba733e9103c5815bfd454c34a1688612'
+    // 500PPC: 'f7f36ed79a4a37bc3d5cc2ecbc804408f8bcc7174c6768bc46f7a155d1afbb35'
+    // 500PPC: '7f6b2536bf89fbe9fa1eba6b95758142804267056ec9466dcf7bbc249b074089'
+    run(this, {
+      lock: Script('OP_DUP OP_ADD OP_16 OP_EQUAL'),
+      unlock: Script('OP_NOP')
+    });
+  });
+
+  specify('if statement', function(done) {
+    // Testnet txnids locking funds with this script:
+    // 1000PPC: '31be5da0d296bf61a6575aa36785898f7026343eb130a36c8b829a41ded5a67c'
+    // 1000PPC: '3d3a68ce1b52293947f4fa2930533ecee84d753d39a843823e8e377c697b2954'
+    // 1000PPC: '084e770c4861d30272832e8055c652ae16c7dcb052cc76fb2fdc62bef2b4bcdc'
+    run(this, {
+      lock: Script('OP_5 OP_ADD')
+            .add(Script('OP_IF'))
+            .add(Script(  'OP_RETURN'))
+            .add(Script('OP_ELSE'))
+            .add(Script(  'OP_TRUE'))
+            .add(Script('OP_ENDIF')),
+      unlock: Script('OP_NOP')
+    });
+  });
+
+  specify('obfuscated stack', function(done) {
+    // Testnet txnids locking funds with this script:
+    // 3000PPC: '6ae2c662e91fe2c0850bc1ec2322198ef43d808253faaaf20b757d25aeac7a3c'
+    // 3000PPC: '2cd2068412df761c5fddf65287504a141525fe82cf9661c130e2ac3f170723a6'
+    // 3000PPC: '225ec1e840e38c5332611181ff038638b6af88b1e4d0d530aa34da58566627e7'
+    run(this, {
+      lock: Script('OP_DEPTH OP_3 OP_EQUALVERIFY')
+            .add(Script('OP_ROT OP_DUP OP_3 OP_EQUALVERIFY'))
+            .add(Script('OP_ADD OP_8 OP_EQUALVERIFY'))
+            .add(Script('OP_TRUE OP_EQUAL')),
+      unlock: Script('OP_NOP')
+    });
+  });
+});
+
+});
+
+require.register("script-runner.ls", function(exports, require, module) {
+var chai, assert, expect, should, ref$, Transaction, Script, Input, Output, Interpreter, findIndex, config, createRedeemTransaction;
+chai = require('chai');
+assert = chai.assert, expect = chai.expect, should = chai.should;
+ref$ = require('bitcore-lib'), Transaction = ref$.Transaction, Script = ref$.Script;
+Input = Transaction.Input, Output = Transaction.Output;
+Interpreter = Script.Interpreter;
+findIndex = require('prelude-ls').findIndex;
+config = require('./config');
+module.exports = function(ctx, scripts){
+  var done, groupName, scriptName, outputScript, unlockScript, redeemScript, redeemTxn;
+  done = ctx.test.callback;
+  groupName = ctx.test.parent.title;
+  scriptName = ctx.test.title;
+  outputScript = scripts.lock;
+  unlockScript = scripts.unlock;
+  console.log(
+  '\n' + groupName + ': ' + scriptName + '\n' + '  Lock script: ' + outputScript.toString() + '\n' + '  P2SH output: ' + outputScript.toScriptHashOut().toString() + '\n' + '  P2SH address: ' + outputScript.toScriptHashOut().toAddress().toString());
+  assert(Interpreter().verify(unlockScript, outputScript), 'Incorrect solution Script');
+  console.log(
+  '  Unlock script: ' + unlockScript.toString() + '\n');
+  redeemScript = function(s){
+    return s.add(outputScript);
+  }(
+  function(s){
+    return s.add(outputScript.toBuffer().length);
+  }(
+  function(s){
+    return s.add(unlockScript);
+  }(
+  Script())));
+  redeemTxn = createRedeemTransaction(redeemScript, outputScript);
+  if (redeemTxn) {
+    console.log(
+    '  Redeem script: ' + redeemScript.toString() + '\n' + '  Redeem txn: ' + redeemTxn.toString());
+  }
+  return done();
+};
+createRedeemTransaction = function(redeemScript, prevOutputScript){
+  var unspentTxn, prevOutputIndex, prevOutput, input;
+  if (!config.redeemTransaction) {
+    return undefined;
+  }
+  unspentTxn = Transaction(config.redeemTransaction);
+  prevOutputIndex = findIndex(function(o){
+    return o.script.toString() === prevOutputScript.toScriptHashOut().toString();
+  })(
+  unspentTxn.outputs);
+  if (!prevOutputIndex) {
+    return undefined;
+  }
+  prevOutput = unspentTxn.outputs[prevOutputIndex];
+  input = Input({
+    prevTxId: unspentTxn.id,
+    outputIndex: prevOutputIndex,
+    sequenceNumber: 'ffffffff',
+    script: redeemScript,
+    output: prevOutput
+  });
+  return new Transaction().addInput(input).to(config.redeemAddress, prevOutput.satoshis - 10000);
+};
+});
+
+;require.register("transactions/all.ls", function(exports, require, module) {
+describe('Transactions', function(){
+  require('./peerassets');
+  return require('./peerassets-test');
+});
+});
+
+;require.register("transactions/peerassets-test.ls", function(exports, require, module) {
+var pa, ref$, Transaction, PrivateKey, Networks, crypto, assert, Buffer;
+pa = require('../lib/peerassets/peerassets');
+ref$ = require('bitcore-lib'), Transaction = ref$.Transaction, PrivateKey = ref$.PrivateKey, Networks = ref$.Networks, crypto = ref$.crypto;
+assert = require('chai').assert;
+Buffer = require('buffer').Buffer;
+describe('PeerAssets tests', function(){
+  return specify('P2TH', function(done){
+    var testVector, mainnet, testnet, binaryTxnId, bn, priv;
+    testVector = {
+      "txnId": "c23375caa1ba3b0eec3a49fff5e008dede0c2761bb31fddd830da32671c17f84",
+      "WIF": "UBctiEkfxpU2HkyTbRKjiGHT5socJJwCny6ePfUtzo8Jad9wVzeA",
+      "Address": "PRoUKDUhA1vgBseJCaGMd9AYXdQcyEjxu9",
+      "testnetWIF": "cU6CjGw3mRmirjiUZfRkJ1aj2D493k7uuhywj6tCVbLAMABy4MwU",
+      "testnetAddress": "mxjFTJApv7sjz9T9a4vCnAQbmsqSoL8VWo"
+    };
+    mainnet = Networks.get('peercoin');
+    testnet = Networks.get('peercoin-testnet');
+    binaryTxnId = Buffer.from(testVector.txnId, 'hex');
+    bn = crypto.BN.fromBuffer(binaryTxnId);
+    priv = new PrivateKey(bn, mainnet);
+    assert.equal(priv.toWIF(), testVector.WIF);
+    assert.equal(priv.toAddress().toString(), testVector.Address);
+    priv = PrivateKey.fromBuffer(bn, testnet);
+    assert.equal(priv.toWIF(), testVector.testnetWIF);
+    assert.equal(priv.toAddress().toString(), testVector.testnetAddress);
+    return done();
+  });
+});
+});
+
+;require.register("transactions/peerassets.ls", function(exports, require, module) {
+var pa, ref$, Transaction, Script, PrivateKey, assert, assetOwnerPrivateKey, prevTxn, utxo, deckSpawnTxn, numberOfDecimals;
+pa = require('../lib/peerassets/peerassets');
+ref$ = require('bitcore-lib'), Transaction = ref$.Transaction, Script = ref$.Script, PrivateKey = ref$.PrivateKey;
+assert = require('chai').assert;
+assetOwnerPrivateKey = new PrivateKey();
+prevTxn = new Transaction().to(assetOwnerPrivateKey.toPublicKey().toAddress(), 10000000);
+utxo = prevTxn.getUnspentOutput(0);
+pa.setup(true, true);
+deckSpawnTxn = undefined;
+numberOfDecimals = 2;
+describe('PeerAssets', function(){
+  specify('Deck spawn', function(done){
+    var assetShortName, unsignedDeckSpawn, decodedDeckSpawnTxn, unsignedDeckSpawn2, deckSpawnTxn2;
+    assetShortName = 'hello';
+    unsignedDeckSpawn = pa.createDeckSpawnTransaction(utxo, assetShortName, numberOfDecimals, [pa.ISSUE_MODE.ONCE, pa.ISSUE_MODE.CUSTOM]);
+    deckSpawnTxn = unsignedDeckSpawn.sign(assetOwnerPrivateKey);
+    decodedDeckSpawnTxn = pa.decodeDeckSpawnTransaction(deckSpawnTxn);
+    assert.equal(decodedDeckSpawnTxn.owner, assetOwnerPrivateKey.toAddress().toString(), 'Failed to decode asset owner');
+    assert.equal(decodedDeckSpawnTxn.shortName, assetShortName, 'Failed to decode asset short name');
+    assert.equal(decodedDeckSpawnTxn.numberOfDecimals, numberOfDecimals, 'Failed to decode number of decimals');
+    assert(decodedDeckSpawnTxn.issueMode & pa.ISSUE_MODE.ONCE, 'Failed to check ONCE flag');
+    assert(decodedDeckSpawnTxn.issueMode & pa.ISSUE_MODE.CUSTOM, 'Failed to check MULTI flag');
+    assert.deepEqual(decodedDeckSpawnTxn.getIssueModes(), ['CUSTOM', 'ONCE'], 'Failed to get issue mode list');
+    unsignedDeckSpawn2 = pa.createDeckSpawnTransaction(utxo, assetShortName, numberOfDecimals, pa.ISSUE_MODE.ONCE ^ pa.ISSUE_MODE.CUSTOM);
+    deckSpawnTxn2 = unsignedDeckSpawn2.sign(assetOwnerPrivateKey);
+    assert.equal(unsignedDeckSpawn2.serialize(true), unsignedDeckSpawn.serialize(true));
+    return done();
+  });
+  return specify('Card transfer', function(done){
+    var sender, prevTxn, utxo, receiverAddress, amount, transferTxn, decodedTransferTxn;
+    sender = new PrivateKey();
+    prevTxn = new Transaction().to(sender.toAddress(), 10000000);
+    utxo = prevTxn.getUnspentOutput(0);
+    receiverAddress = new PrivateKey().toAddress().toString();
+    amount = 123;
+    transferTxn = pa.createCardTransferTransaction(utxo, receiverAddress, amount, deckSpawnTxn).sign(sender);
+    decodedTransferTxn = pa.decodeCardTransferTransaction(transferTxn);
+    assert.equal(decodedTransferTxn.from, sender.toAddress().toString(), 'Failed to decode transfer sender');
+    assert.equal(decodedTransferTxn.to, receiverAddress, 'Failed to decode transfer receiver');
+    assert.equal(decodedTransferTxn.amount, amount, 'Failed to decode transfer amount');
+    assert.equal(decodedTransferTxn.numberOfDecimals, numberOfDecimals, 'Failed to decode transfer amount');
+    return done();
+  });
+});
+});
+
+;require.alias("assert/assert.js", "assert");
 require.alias("crypto-browserify/index.js", "crypto");
 require.alias("events/events.js", "events");
 require.alias("process/browser.js", "process");

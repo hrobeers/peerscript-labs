@@ -153,7 +153,7 @@ require.register("test/all.ls", function(exports, require, module) {
 var appRequire, bitcore, config;
 appRequire = require('./test-utils').appRequire;
 bitcore = require('bitcore-lib');
-appRequire('bitcore-ppc');
+appRequire('lib/bitcore-ppc/bitcore-ppc');
 config = appRequire('config');
 if (config.testnet) {
   bitcore.Networks.defaultNetwork = bitcore.Networks.get('peercoin-testnet');

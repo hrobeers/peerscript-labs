@@ -11,23 +11,23 @@ var txnFee = 10000;   // 0.01PPC
 
 // P2TH info
 // PPC mainnet:
-//  PAprod: PAprodpH5y2YuJFHFCXWRuVzZNr7Tw78sV - 7A6cFXZSZnNUzutCMcuE1hyqDPtysH2LrSA9i5sqP2BPCLrAvZM
-//  PAtest: PAtestVJ4usB4JQwZEhFrYRgnhKh8xRoRd - 79nanGVB5H5cGrpqN69F3v4rjyhXy5DiqF499TB5poF627Z1Gw4
+//  PAprod: PAprodbYvZqf4vjhef49aThB9rSZRxXsM6 - U624wXL6iT7XZ9qeHsrtPGEiU78V1YxDfwq75Mymd61Ch56w47KE
+//  PAtest: PAtesth4QreCwMzXJjYHBcCVKbC4wjbYKP - UAbxMGQQKmfZCwKXAhUQg3MZNXcnSqG5Z6wAJMLNVUAcyJ5yYxLP
 // PPC testnet:
-//  PAprod: miYNy9BbMkQ8Y5VaRDor4mgH5b3FEzVySr - 92NRcL14QbFBREH8runJAq3Q1viQiHoqTmivE8SNRGJ2Y1U6G3a
-//  PAtest: mwqncWSnzUzouPZcLQWcLTPuSVq3rSiAAa - 92oB4Eb4GBfutvtEqDZq3T5avC7pnEkPVme23qTb5mDdDesinm6
+//  PAprod: miHhMLaMWubq4Wx6SdTEqZcUHEGp8RKMZt - cTJVuFKuupqVjaQCFLtsJfG8NyEyHZ3vjCdistzitsD2ZapvwYZH
+//  PAtest: mvfR2sSxAfmDaGgPcmdsTwPqzS6R9nM5Bo - cQToBYwzrB3yHr8h7PchBobM3zbrdGKj2LtXqg7NQLuxsHeKJtRL
 
 var deckSpawnTagHash = undefined;
 setup = function(PPCtestnet, PAtest) {
   // Setup the deck spawn tag hash
   if (!PPCtestnet && !PAtest)
-    deckSpawnTagHash = 'PAprodpH5y2YuJFHFCXWRuVzZNr7Tw78sV';
+    deckSpawnTagHash = 'PAprodbYvZqf4vjhef49aThB9rSZRxXsM6';
   else if (!PPCtestnet && PAtest)
-    deckSpawnTagHash = 'PAtestVJ4usB4JQwZEhFrYRgnhKh8xRoRd';
+    deckSpawnTagHash = 'PAtesth4QreCwMzXJjYHBcCVKbC4wjbYKP';
   else if (PPCtestnet && !PAtest)
-    deckSpawnTagHash = 'miYNy9BbMkQ8Y5VaRDor4mgH5b3FEzVySr';
+    deckSpawnTagHash = 'miHhMLaMWubq4Wx6SdTEqZcUHEGp8RKMZt';
   else if (PPCtestnet && PAtest)
-      deckSpawnTagHash = 'mwqncWSnzUzouPZcLQWcLTPuSVq3rSiAAa';
+    deckSpawnTagHash = 'mvfR2sSxAfmDaGgPcmdsTwPqzS6R9nM5Bo';
 
   // Add getUnspentOutput function to Transaction object
   Transaction.prototype.getUnspentOutput = function(outputIndex) {

@@ -96,10 +96,10 @@ var createCardTransferTransaction = function(utxo, amountsMap, deckSpawnTxn) {
 
   // vout[2] - vout[n+2] -> the receivers
   for (i=0; i<receivers.length; i++)
-    cardTransferTxn.to(receivers[i], amounts[i]);  // vout[2]-vout[n+2]: Receiving parties
+    cardTransferTxn.to(receivers[i], 0);  // vout[2]-vout[n+2]: Receiving parties
 
   // free format from here, typically a change Output
-  cardTransferTxn.to(utxo.address, utxo.satoshis-minTagFee-minTagFee-txnFee);  // vout[3]
+  cardTransferTxn.to(utxo.address, utxo.satoshis-minTagFee-minTagFee-txnFee);  // vout[n+3] Change
 
   return cardTransferTxn;
 }

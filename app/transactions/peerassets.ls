@@ -1,6 +1,7 @@
 pa = require '../lib/peerassets/peerassets'
 
 { Transaction, Script, PrivateKey } = require 'bitcore-lib'
+{ each } = require 'prelude-ls'
 { assert } = require 'chai'
 
 asset-owner-private-key = new PrivateKey()
@@ -54,12 +55,14 @@ describe 'PeerAssets', ->
     sender = new PrivateKey()
     prev-txn = new Transaction().to(sender.to-address(), 10000000)
     utxo = prev-txn.get-unspent-output 0
-    # random receiver
-    receiver-address = new PrivateKey().to-address().to-string()
-    amount = 123
+    # random receivers
+    amounts-map = {}
+    amounts-map[new PrivateKey().to-address().to-string()] = 123
+    amounts-map[new PrivateKey().to-address().to-string()] = 456
+    amounts-map[new PrivateKey().to-address().to-string()] = 789
 
     # Create a card transfer transaction
-    transfer-txn = pa.createCardTransferTransaction(utxo, receiver-address, amount, deck-spawn-txn)
+    transfer-txn = pa.createCardTransferTransaction(utxo, amounts-map, deck-spawn-txn)
                      .sign(sender)
 
     # Decode the card transfer transaction
@@ -67,8 +70,10 @@ describe 'PeerAssets', ->
 
     # Check encoded transfer data
     assert.equal decoded-transfer-txn.from, sender.to-address().to-string(), 'Failed to decode transfer sender'
-    assert.equal decoded-transfer-txn.to, receiver-address, 'Failed to decode transfer receiver'
-    assert.equal decoded-transfer-txn.amount, amount, 'Failed to decode transfer amount'
     assert.equal decoded-transfer-txn.number-of-decimals, number-of-decimals, 'Failed to decode transfer amount'
+
+    # Check all amounts are correctly (de)serialized
+    for address, amount of decoded-transfer-txn.to
+      assert.equal amount, amounts-map[address], 'Failed to decode transfer receiver'
 
     done()

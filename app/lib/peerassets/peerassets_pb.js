@@ -325,12 +325,19 @@ proto.DeckSpawn.MODE = {
  * @constructor
  */
 proto.CardTransfer = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.CardTransfer.repeatedFields_, null);
 };
 goog.inherits(proto.CardTransfer, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   proto.CardTransfer.displayName = 'proto.CardTransfer';
 }
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.CardTransfer.repeatedFields_ = [2];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -360,7 +367,7 @@ proto.CardTransfer.prototype.toObject = function(opt_includeInstance) {
 proto.CardTransfer.toObject = function(includeInstance, msg) {
   var f, obj = {
     version: msg.getVersion(),
-    amount: msg.getAmount(),
+    amountsList: jspb.Message.getField(msg, 2),
     numberOfDecimals: msg.getNumberOfDecimals(),
     assetSpecificData: msg.getAssetSpecificData_asB64()
   };
@@ -404,8 +411,8 @@ proto.CardTransfer.deserializeBinaryFromReader = function(msg, reader) {
       msg.setVersion(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setAmount(value);
+      var value = /** @type {!Array.<number>} */ (reader.readPackedUint64());
+      msg.setAmountsList(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readUint32());
@@ -460,9 +467,9 @@ proto.CardTransfer.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
-  f = this.getAmount();
-  if (f !== 0) {
-    writer.writeUint64(
+  f = this.getAmountsList();
+  if (f.length > 0) {
+    writer.writePackedUint64(
       2,
       f
     );
@@ -509,17 +516,24 @@ proto.CardTransfer.prototype.setVersion = function(value) {
 
 
 /**
- * optional uint64 amount = 2;
- * @return {number}
+ * repeated uint64 amounts = 2;
+ * If you change this array by adding, removing or replacing elements, or if you
+ * replace the array itself, then you must call the setter to update it.
+ * @return {!Array.<number>}
  */
-proto.CardTransfer.prototype.getAmount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldProto3(this, 2, 0));
+proto.CardTransfer.prototype.getAmountsList = function() {
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 2));
 };
 
 
-/** @param {number} value  */
-proto.CardTransfer.prototype.setAmount = function(value) {
-  jspb.Message.setField(this, 2, value);
+/** @param {Array.<number>} value  */
+proto.CardTransfer.prototype.setAmountsList = function(value) {
+  jspb.Message.setField(this, 2, value || []);
+};
+
+
+proto.CardTransfer.prototype.clearAmountsList = function() {
+  jspb.Message.setField(this, 2, []);
 };
 
 

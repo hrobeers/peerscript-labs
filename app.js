@@ -362,6 +362,11 @@ setup = function(PPCtestnet, PAtest) {
 };
 setup(); // Defaults to mainnet & PAprod
 
+
+//
+// Deck spawn functions
+//
+
 var createDeckSpawnTransaction = function(utxo, shortName, numberOfDecimals, issueModes) {
   var deckSpawnTxn = new Transaction()
   .from(utxo)                           // vin[0]: Owner signature
@@ -389,14 +394,31 @@ var decodeDeckSpawnTransaction = function(transaction) {
   return retVal;
 }
 
-var createCardTransferTransaction = function(utxo, receiver, amount, deckSpawnTxn) {
+
+//
+// Card transfer functions
+//
+
+var createCardTransferTransaction = function(utxo, amountsMap, deckSpawnTxn) {
+  var receivers = [];
+  var amounts = [];
+  for (a in amountsMap)
+  {
+    receivers.push(a);
+    amounts.push(amountsMap[a]);
+  }
+
   var cardTransferTxn = new Transaction()
   .from(utxo)                             // vin[0]: Sending party signature
-  .to(receiver, minTagFee)                // vout[0]: Receiving party
-  .to(assetTag(deckSpawnTxn), minTagFee)  // vout[1]: Asset P2TH
-  .addData(createCardTransferMessage(amount, deckSpawnTxn))  // vout[2]: Transfer data
+  .to(assetTag(deckSpawnTxn), minTagFee)  // vout[0]: Asset P2TH
+  .addData(createCardTransferMessage(amounts, deckSpawnTxn));  // vout[1]: Transfer data
+
+  // vout[2] - vout[n+2] -> the receivers
+  for (i=0; i<receivers.length; i++)
+    cardTransferTxn.to(receivers[i], 0);  // vout[2]-vout[n+2]: Receiving parties
+
   // free format from here, typically a change Output
-  .to(utxo.address, utxo.satoshis-minTagFee-minTagFee-txnFee);  // vout[3]
+  cardTransferTxn.to(utxo.address, utxo.satoshis-minTagFee-minTagFee-txnFee);  // vout[n+3] Change
 
   return cardTransferTxn;
 }
@@ -407,16 +429,29 @@ var decodeCardTransferTransaction = function(transaction) {
   var inputs = transaction.inputs;
   var outputs = transaction.outputs;
   if (outputs.length < 3) return undefined;
-  if (!outputs[0].script.isPublicKeyHashOut() && !outputs[0].script.isScriptHashOut()) return undefined;
-  if (!outputs[1].script.isPublicKeyHashOut()) return undefined;
-  if (!outputs[2].script.isDataOut()) return undefined;
+  if (!outputs[0].script.isPublicKeyHashOut()) return undefined;
+  if (!outputs[1].script.isDataOut()) return undefined;
 
-  var retVal = decodeCardTransferMessage(outputs[2].script.getData());
+  var retVal = {};
+  var msg = decodeCardTransferMessage(outputs[1].script.getData());
+  retVal.numberOfDecimals = msg.numberOfDecimals;
   retVal.from = inputs[0].script.toAddress().toString();
-  retVal.to = outputs[0].script.toAddress().toString();
+
+  retVal.to = {};
+  for (i=0; i<msg.amounts.length; i++)
+  {
+    // Test for validity
+    if (!outputs[2+i].script.isPublicKeyHashOut() && !outputs[2+i].script.isScriptHashOut()) return undefined;
+    retVal.to[outputs[2+i].script.toAddress().toString()] = msg.amounts[i];
+  }
 
   return retVal;
 }
+
+
+//
+// Exports
+//
 
 module.exports = {
   setup: setup,
@@ -429,6 +464,11 @@ module.exports = {
 
   }
 }
+
+
+//
+// Internal functions
+//
 
 var createDeckSpawnMessage = function(shortName, numberOfDecimals, issueModes) {
   var ds = new pb.DeckSpawn();
@@ -478,12 +518,12 @@ var assetTag = function(deckSpawnTxn) {
   return new bitcore.PrivateKey(bn).toPublicKey().toAddress();
 }
 
-var createCardTransferMessage = function(amount, deckSpawnTxn) {
+var createCardTransferMessage = function(amounts, deckSpawnTxn) {
   var decoded = decodeDeckSpawnTransaction(deckSpawnTxn);
   if (!decoded) return undefined;
 
   var ct = new pb.CardTransfer();
-  ct.setAmount(amount);
+  ct.setAmountsList(amounts);
   ct.setNumberOfDecimals(decoded.numberOfDecimals);
 
   return new Buffer(ct.serializeBinary());
@@ -493,7 +533,7 @@ var decodeCardTransferMessage = function(message) {
   var ds = pb.CardTransfer.deserializeBinary(new Uint8Array(message));
 
   return {
-    amount: ds.getAmount(),
+    amounts: ds.getAmountsList(),
     numberOfDecimals: ds.getNumberOfDecimals()
   }
 }
@@ -828,12 +868,19 @@ proto.DeckSpawn.MODE = {
  * @constructor
  */
 proto.CardTransfer = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.CardTransfer.repeatedFields_, null);
 };
 goog.inherits(proto.CardTransfer, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   proto.CardTransfer.displayName = 'proto.CardTransfer';
 }
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.CardTransfer.repeatedFields_ = [2];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -863,7 +910,7 @@ proto.CardTransfer.prototype.toObject = function(opt_includeInstance) {
 proto.CardTransfer.toObject = function(includeInstance, msg) {
   var f, obj = {
     version: msg.getVersion(),
-    amount: msg.getAmount(),
+    amountsList: jspb.Message.getField(msg, 2),
     numberOfDecimals: msg.getNumberOfDecimals(),
     assetSpecificData: msg.getAssetSpecificData_asB64()
   };
@@ -907,8 +954,8 @@ proto.CardTransfer.deserializeBinaryFromReader = function(msg, reader) {
       msg.setVersion(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setAmount(value);
+      var value = /** @type {!Array.<number>} */ (reader.readPackedUint64());
+      msg.setAmountsList(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readUint32());
@@ -963,9 +1010,9 @@ proto.CardTransfer.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
-  f = this.getAmount();
-  if (f !== 0) {
-    writer.writeUint64(
+  f = this.getAmountsList();
+  if (f.length > 0) {
+    writer.writePackedUint64(
       2,
       f
     );
@@ -1012,17 +1059,24 @@ proto.CardTransfer.prototype.setVersion = function(value) {
 
 
 /**
- * optional uint64 amount = 2;
- * @return {number}
+ * repeated uint64 amounts = 2;
+ * If you change this array by adding, removing or replacing elements, or if you
+ * replace the array itself, then you must call the setter to update it.
+ * @return {!Array.<number>}
  */
-proto.CardTransfer.prototype.getAmount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldProto3(this, 2, 0));
+proto.CardTransfer.prototype.getAmountsList = function() {
+  return /** @type {!Array.<number>} */ (jspb.Message.getField(this, 2));
 };
 
 
-/** @param {number} value  */
-proto.CardTransfer.prototype.setAmount = function(value) {
-  jspb.Message.setField(this, 2, value);
+/** @param {Array.<number>} value  */
+proto.CardTransfer.prototype.setAmountsList = function(value) {
+  jspb.Message.setField(this, 2, value || []);
+};
+
+
+proto.CardTransfer.prototype.clearAmountsList = function() {
+  jspb.Message.setField(this, 2, []);
 };
 
 
@@ -1249,9 +1303,10 @@ describe('PeerAssets tests', function(){
 });
 
 ;require.register("transactions/peerassets.ls", function(exports, require, module) {
-var pa, ref$, Transaction, Script, PrivateKey, assert, assetOwnerPrivateKey, prevTxn, utxo, deckSpawnTxn, numberOfDecimals;
+var pa, ref$, Transaction, Script, PrivateKey, each, assert, assetOwnerPrivateKey, prevTxn, utxo, deckSpawnTxn, numberOfDecimals;
 pa = require('../lib/peerassets/peerassets');
 ref$ = require('bitcore-lib'), Transaction = ref$.Transaction, Script = ref$.Script, PrivateKey = ref$.PrivateKey;
+each = require('prelude-ls').each;
 assert = require('chai').assert;
 assetOwnerPrivateKey = new PrivateKey();
 prevTxn = new Transaction().to(assetOwnerPrivateKey.toPublicKey().toAddress(), 10000000);
@@ -1278,18 +1333,22 @@ describe('PeerAssets', function(){
     return done();
   });
   return specify('Card transfer', function(done){
-    var sender, prevTxn, utxo, receiverAddress, amount, transferTxn, decodedTransferTxn;
+    var sender, prevTxn, utxo, amountsMap, transferTxn, decodedTransferTxn, address, ref$, amount;
     sender = new PrivateKey();
     prevTxn = new Transaction().to(sender.toAddress(), 10000000);
     utxo = prevTxn.getUnspentOutput(0);
-    receiverAddress = new PrivateKey().toAddress().toString();
-    amount = 123;
-    transferTxn = pa.createCardTransferTransaction(utxo, receiverAddress, amount, deckSpawnTxn).sign(sender);
+    amountsMap = {};
+    amountsMap[new PrivateKey().toAddress().toString()] = 123;
+    amountsMap[new PrivateKey().toAddress().toString()] = 456;
+    amountsMap[new PrivateKey().toAddress().toString()] = 789;
+    transferTxn = pa.createCardTransferTransaction(utxo, amountsMap, deckSpawnTxn).sign(sender);
     decodedTransferTxn = pa.decodeCardTransferTransaction(transferTxn);
     assert.equal(decodedTransferTxn.from, sender.toAddress().toString(), 'Failed to decode transfer sender');
-    assert.equal(decodedTransferTxn.to, receiverAddress, 'Failed to decode transfer receiver');
-    assert.equal(decodedTransferTxn.amount, amount, 'Failed to decode transfer amount');
     assert.equal(decodedTransferTxn.numberOfDecimals, numberOfDecimals, 'Failed to decode transfer amount');
+    for (address in ref$ = decodedTransferTxn.to) {
+      amount = ref$[address];
+      assert.equal(amount, amountsMap[address], 'Failed to decode transfer receiver');
+    }
     return done();
   });
 });
